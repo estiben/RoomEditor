@@ -36,8 +36,6 @@ class Room : public QGraphicsScene
     Q_OBJECT
 public:
     Room(QWidget*, MainWindow*);
-    void Save(QWidget*);
-    void AddObject(QString, qint32, qint32);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 

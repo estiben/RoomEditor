@@ -39,7 +39,7 @@ void MainWindow::ApplyBackground()
     if (ui->listWidgetBackgrounds->currentItem() != NULL)
     {
         roomScene->tiledBackground = ui->listWidgetBackgrounds->currentItem()->text();
-        roomScene->drawBackground();
+        roomScene->setBackgroundBrush(QPixmap(ui->listWidgetBackgrounds->currentItem()->text()));
     }
     else
     {
@@ -162,6 +162,7 @@ void MainWindow::SaveRoom()
     writer.writeStartElement(QString("room"));
     writer.writeAttribute(QString("width"), QString::number(roomScene->width()));
     writer.writeAttribute(QString("height"), QString::number(roomScene->height()));
+    writer.writeAttribute(QString("background"), roomScene->tiledBackground);
 
     //Write tile information
     writer.writeStartElement(QString("tiles"));
