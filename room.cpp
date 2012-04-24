@@ -35,8 +35,13 @@ void Room::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         objects->append(ro);
         this->addItem(ro);
 
+        //set RoomObject properties
         ro->setPos(mousex, mousey);
-        ro->setZValue(0);
+        ro->setZValue(parentWindow->ui->lineEditDepth->text().toInt());
+        for (int row = 0; row < parentWindow->ui->tableWidgetProperties->rowCount(); row++)
+        {
+            ro->paramList[row] = parentWindow->ui->tableWidgetProperties->model()->data(parentWindow->ui->tableWidgetProperties->model()->index(row, 0)).toString();
+        }
     }
 }
 

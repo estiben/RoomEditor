@@ -25,9 +25,8 @@ public:
     RoomObject(const RoomObject& ro); //copy constructor
     QString className;
     qint32 depth;
-    QString params;//A string containing parameters; Should always contain at least x, y, and depth.
     QString sprite;
-    QList<QString> paramList;
+    QList<QString> paramList;//Not including x, y, or depth
 
 };
 
@@ -68,6 +67,7 @@ public slots:
 
 };
 
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -76,7 +76,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    //The possible objects you can place in the room
+    //The possible objects you can place in the room. The key is the class name
     QMap<QString, RoomObject*> objectPool;
     //The possible backgrounds you can place in the room
     QList<QString> backgroundPool;
@@ -84,8 +84,6 @@ public:
     QString roomFileName;
     qint32 roomX;
     qint32 roomY;
-    //List of objects placed in the room
-    //QList<RoomObject> *objects;
     //List of background tiles placed in the room
     QList<QString> *tiles;
     Ui::MainWindow *ui;
@@ -99,14 +97,15 @@ private:
     QList<QGraphicsLineItem*> gridLines;
 
 private slots:
+    void ApplyBackground();
+    void ApplyRoomSize();
+    void ClearBackground();
+    void LoadObjects();
     void NewRoom();
     void SaveRoom();
-    void LoadObjects();
-    void ApplyRoomSize();
-    void ShowGrid(bool show);
-    void ApplyBackground();
-    void ClearBackground();
     void ShowBackgroundPreview(const QString&);
+    void ShowGrid(bool show);
+    void SetupParamTable(const QString&);
 };
 
 #endif // MAINWINDOW_H

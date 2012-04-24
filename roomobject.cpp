@@ -11,9 +11,9 @@ RoomObject::RoomObject(const QString& spritePath) :
 RoomObject::RoomObject(const RoomObject& ro) : QGraphicsPixmapItem()
 {
     this->className = ro.className;
-    this->params = ro.params;
     this->sprite = ro.sprite;
     this->depth = ro.depth;
+    this->paramList = ro.paramList;
     const QPixmap pm = QPixmap(this->sprite);
     this->setPixmap(pm);
 }

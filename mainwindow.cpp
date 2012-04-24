@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,10 +18,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->btnSetBackground, SIGNAL(clicked()), this, SLOT(ApplyBackground()));
     connect(ui->btnClearBackground, SIGNAL(clicked()), this, SLOT(ClearBackground()));
     connect(ui->listWidgetBackgrounds, SIGNAL(currentTextChanged(const QString&)), this, SLOT(ShowBackgroundPreview(const QString&)));
-    //connect(ui->graphicsView, SIGNAL(), this, SLOT(LoadObjects()));
+    connect(ui->listWidgetObjects, SIGNAL(currentTextChanged(const QString&)), this, SLOT(SetupParamTable(const QString&)));
 
     backgroundPreview = new QGraphicsScene();
     ui->graphicsViewBackground->setScene(backgroundPreview);
+
+    QValidator *intValidator = new QIntValidator(this);
+    ui->lineEditDepth->setValidator(intValidator);
+    ui->lineEditGrid->setValidator(intValidator);
+    ui->lineEditRoomX->setValidator(intValidator);
+    ui->lineEditRoomY->setValidator(intValidator);
 }
 
 
@@ -90,6 +97,8 @@ void MainWindow::LoadObjects()
     ui->listWidgetObjects->clear();
     ui->listWidgetBackgrounds->clear();
 
+    RoomObject* roomObj; //Temp pointer for new RoomObject objects
+
     QXmlStreamReader reader(xmlFile);
     while (!reader.atEnd())
     {
@@ -104,17 +113,35 @@ void MainWindow::LoadObjects()
             {
                 ui->listWidgetObjects->addItem(new QListWidgetItem(QIcon(reader.attributes().value("sprite").toString()), reader.attributes().value("class").toString()));
 
-                RoomObject* roomObj = new RoomObject(reader.attributes().value("sprite").toString());
+                roomObj = new RoomObject(reader.attributes().value("sprite").toString());
                 roomObj->className = reader.attributes().value("class").toString();
-                roomObj->params = reader.attributes().value("params").toString();
                 roomObj->sprite = reader.attributes().value("sprite").toString();
 
-                objectPool.insert(reader.attributes().value("class").toString(), roomObj);
+                //objectPool.insert(reader.attributes().value("class").toString(), roomObj);
+            }
+            else if (reader.name().toString() == "param")
+            {
+                QString paramName = reader.readElementText();
+                if (paramName == "")
+                {
+                    QMessageBox errorMessageBox;
+                    errorMessageBox.setIcon(QMessageBox::Critical);
+                    errorMessageBox.setText("ERROR: Empty param name.");
+                    errorMessageBox.exec();
+                }
+                roomObj->paramList.append(paramName);
             }
             else if (reader.name().toString() == "background")
             {
                 ui->listWidgetBackgrounds->addItem(new QListWidgetItem(QIcon(reader.attributes().value("path").toString()), reader.attributes().value("path").toString()));
                 backgroundPool.append(reader.attributes().value("path").toString());
+            }
+        }
+        if (node == QXmlStreamReader::EndElement)
+        {
+            if (reader.name().toString() == "object")
+            {
+                objectPool.insert(roomObj->className, roomObj);
             }
         }
     }
@@ -198,6 +225,18 @@ void MainWindow::SaveRoom()
     }
     writer.writeEndElement();//objects
     writer.writeEndElement();//room
+}
+
+
+//Set rows in the object param table
+void MainWindow::SetupParamTable(const QString& className)
+{
+    RoomObject *selectedObject = objectPool.value(className);
+    ui->tableWidgetProperties->clear();
+    ui->tableWidgetProperties->setRowCount(selectedObject->paramList.length());
+    ui->tableWidgetProperties->setHorizontalHeaderLabels(QStringList("Value"));
+    ui->tableWidgetProperties->setVerticalHeaderLabels(QStringList(selectedObject->paramList));
+    ui->tableWidgetProperties->verticalHeader()->setVisible(true);
 }
 
 

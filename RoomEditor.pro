@@ -13,8 +13,7 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     room.cpp \
-    roomobject.cpp \
-    roomgraphicsscene.cpp
+    roomobject.cpp
 
 HEADERS  += mainwindow.h
 
