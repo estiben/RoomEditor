@@ -18,29 +18,44 @@ void Room::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        int mousex = event->scenePos().x();
-        int mousey = event->scenePos().y();
-        if (parentWindow->ui->checkBoxSnapToGrid->checkState())
+        if (parentWindow->ui->tabMain->currentIndex() > 0)
         {
-            mousex -= (mousex % parentWindow->ui->lineEditGrid->text().toInt());
-            mousey -= (mousey % parentWindow->ui->lineEditGrid->text().toInt());
-        }
+            int mousex = event->scenePos().x();
+            int mousey = event->scenePos().y();
+            if (parentWindow->ui->checkBoxSnapToGrid->checkState())
+            {
+                mousex -= (mousex % parentWindow->ui->lineEditGrid->text().toInt());
+                mousey -= (mousey % parentWindow->ui->lineEditGrid->text().toInt());
+            }
 
-        //get pointer to the selected RoomObject in the list widget
-        RoomObject* selectedObj = this->parentWindow->objectPool.value(this->parentWindow->ui->listWidgetObjects->currentItem()->text());
+            RoomObject* ro;
 
-        //make a copy of the selected RoomObject
-        RoomObject* ro = new RoomObject(*selectedObj);
+            if (parentWindow->ui->tabMain->currentIndex() == 1)
+            {
+                //get pointer to the selected RoomObject in the list widget
+                RoomObject* selectedObj = this->parentWindow->objectPool.value(this->parentWindow->ui->listWidgetObjects->currentItem()->text());
 
-        objects->append(ro);
-        this->addItem(ro);
+                //make a copy of the selected RoomObject
+                ro = new RoomObject(*selectedObj);
 
-        //set RoomObject properties
-        ro->setPos(mousex, mousey);
-        ro->setZValue(parentWindow->ui->lineEditDepth->text().toInt());
-        for (int row = 0; row < parentWindow->ui->tableWidgetProperties->rowCount(); row++)
-        {
-            ro->paramList[row] = parentWindow->ui->tableWidgetProperties->model()->data(parentWindow->ui->tableWidgetProperties->model()->index(row, 0)).toString();
+                for (int row = 0; row < parentWindow->ui->tableWidgetProperties->rowCount(); row++)
+                {
+                    ro->paramList[row] = parentWindow->ui->tableWidgetProperties->model()->data(parentWindow->ui->tableWidgetProperties->model()->index(row, 0)).toString();
+                }
+                objects->append(ro);
+            }
+            else if (parentWindow->ui->tabMain->currentIndex() == 2)
+            {
+                //get pointer to the selected RoomObject in the list widget
+                ro = new RoomObject(this->parentWindow->ui->listWidgetBackgrounds->currentItem()->text());
+                tiles->append(ro);
+            }
+
+            //set RoomObject position
+            ro->setPos(mousex, mousey);
+            ro->setZValue(parentWindow->ui->lineEditDepth->text().toInt());
+
+            this->addItem(ro);
         }
     }
 }

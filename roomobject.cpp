@@ -6,6 +6,7 @@ RoomObject::RoomObject(const QString& spritePath) :
     const QPixmap pm = QPixmap(spritePath);
     this->setPixmap(pm);
     this->paramList = QList<QString>();
+    this->sprite = spritePath;
 }
 
 RoomObject::RoomObject(const RoomObject& ro) : QGraphicsPixmapItem()

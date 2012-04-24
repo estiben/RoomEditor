@@ -51,22 +51,6 @@ public:
     QGraphicsView *graphicsView;
 };
 
-class RoomGraphicsScene : public QGraphicsScene
-{
-    Q_OBJECT
-public:
-    explicit RoomGraphicsScene(QWidget *parent = 0);
-    //void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-
-private:
-    QWidget *parent;
-
-signals:
-
-public slots:
-
-};
-
 
 class MainWindow : public QMainWindow
 {
@@ -84,8 +68,7 @@ public:
     QString roomFileName;
     qint32 roomX;
     qint32 roomY;
-    //List of background tiles placed in the room
-    QList<QString> *tiles;
+
     Ui::MainWindow *ui;
 
 private:
@@ -103,9 +86,9 @@ private slots:
     void LoadObjects();
     void NewRoom();
     void SaveRoom();
+    void SetupParamTable(const QString&);
     void ShowBackgroundPreview(const QString&);
     void ShowGrid(bool show);
-    void SetupParamTable(const QString&);
 };
 
 #endif // MAINWINDOW_H

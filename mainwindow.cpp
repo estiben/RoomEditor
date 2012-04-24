@@ -59,6 +59,7 @@ void MainWindow::ApplyBackground()
 void MainWindow::ClearBackground()
 {
     roomScene->tiledBackground = "";
+    roomScene->setBackgroundBrush(QPixmap(""));
 }
 
 
@@ -196,9 +197,12 @@ void MainWindow::SaveRoom()
     QList<RoomObject*>::iterator i;
     for (i = roomScene->tiles->begin(); i != roomScene->tiles->end(); ++i)
     {
-        //out << (*i)->className;
-        //out << (*i)->x();
-
+        writer.writeStartElement(QString("tile"));
+        writer.writeAttribute(QString("name"), (*i)->sprite);
+        writer.writeAttribute(QString("x"), QString::number((*i)->x()));
+        writer.writeAttribute(QString("y"), QString::number((*i)->y()));
+        writer.writeAttribute(QString("depth"), QString::number((*i)->zValue()));
+        writer.writeEndElement();
     }
     writer.writeEndElement();//tiles
 
