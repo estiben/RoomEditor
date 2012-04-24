@@ -32,7 +32,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabSettings">
          <attribute name="title">
@@ -223,7 +223,19 @@
              <widget class="QListWidget" name="listWidgetObjects"/>
             </item>
             <item>
-             <widget class="QGraphicsView" name="graphicsView_2"/>
+             <widget class="QTableWidget" name="tableWidgetProperties">
+              <property name="columnCount">
+               <number>1</number>
+              </property>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <column>
+               <property name="text">
+                <string>Value</string>
+               </property>
+              </column>
+             </widget>
             </item>
            </layout>
           </item>
@@ -281,6 +293,40 @@
          </size>
         </property>
        </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QLabel" name="lblDepth">
+        <property name="text">
+         <string>Depth:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEditDepth">
+        <property name="inputMethodHints">
+         <set>Qt::ImhNone</set>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
